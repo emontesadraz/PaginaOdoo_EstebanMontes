@@ -70,3 +70,67 @@ Una vez hecho esto ya podremos entrar libremente con nuestro usuario a nuestra p
 Ahora si nos salimos y volvemos a entrar nos saldrá esta página de inicio de sesion 
 ![Imagen login Odoo](imagenes/OdooLogin.png)
 Donde solo vamos a poner el correo electrónico y la contraseña con la que nos registramos.
+## PG ADMIN
+### 1. Registrarnos en Pg Admin
+Ahora empezaremos con la instalación de PG Admin. Para buscar nuestra página de PG Admin haremos algo muy parecido a cuando buscamos la de Odoo.
+
+Si nuestra conexión es de tipo Adaptador Puente
+```bash
+[Ip del dispositivo]:8888
+```
+
+Si nuestra conexión es de tipo NAT
+```bash
+localhost:8888
+```
+
+Una vez busquemos esto entraremos en esta página
+![Imagen PGAdmin Registro](imagenes/PGAdmin.png)
+Aquí pondremos el email y la contraseña que hemos proporcionado en nuestro docker-compose
+
+Más concretamente esta parte del contenedor de PG Admin (el email y la contraseña dados son de ejemplo, aquí pon tu contraseña y el correo que desees)
+```yml
+environment:
+      PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
+      PGADMIN_DEFAULT_PASSWORD: strong-password
+```
+
+Una vez introducido el correo y la contraseña correctamente entraremos a nuestro Pg Admin
+![Imagen PG Admin inicio](imagenes/PGAdminNormal.png)
+Ahora vamos a añadir nuestro servidor
+
+### 2. Añadir servidor
+Para este paso tendremos que darle a "Añadir Nuevo Servidor" y nos saldrá esta pestaña
+![Imagen Configuracion PG Admin](imagenes/PGAdminConfiguracion.png)
+Nos saldrá el "Nombre" vacío. Le ponemos el nombre que queramos para nuestro servidor. 
+Una vez hecho esto, vamos a la pestaña de "Conexión" y nos aparecerá esto
+![Imagen Configuración conexión](imagenes/PGAdminConexion.png)
+
+Ahora prestad mucha atención a los pasos a seguir para rellenar la Direccion de servidor
+ 1. Iremos a nuestra terminal y pondremos el siguiente comando
+    ```bash
+    sudo docker ps -a
+    ```
+    Una vez ejecutado nos saldrá esto, buscamos el ID de nuestra imagen de postgres, tal cual aparece en la imagen
+    ![Terminal Ip](imagenes/IpTerminal.png)
+2. Copiamos el ID y pondremos el siguiente código
+    ```bash
+    sudo docker inspect [ID]
+    ```
+    Y copiaremos la IP Address, que es lo que tendremos que pegar en Direccion del servidor
+    ![Terminal IP 2](imagenes/IpTerminal2.png)
+3. Después de pegar la Direccion de servidor, ponemos el nobre de usuario y la contraseña que tenemos en nuestro docker compose
+    ```yml
+    db:
+    image: postgres:15 # Imagen de Postgres
+    environment:
+      - POSTGRES_DB=postgres  # Nombre de la base de datos
+      - POSTGRES_PASSWORD=odoo # Contraseña de la base de datos
+      - POSTGRES_USER=odoo # Usuario de la base de datos
+    ```
+    Y le damos a "Salvar"
+
+Una vez hecho todos los pasos ya podremos acceder a nuestro servidor y controlarlo
+![Imagen Servidor](imagenes/PgAdminServidor.png)
+
+Y listo, ya tendrías instalado Odoo y PG Admin configurado totalmente
