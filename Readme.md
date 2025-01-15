@@ -134,3 +134,30 @@ Una vez hecho todos los pasos ya podremos acceder a nuestro servidor y controlar
 ![Imagen Servidor](imagenes/PgAdminServidor.png)
 
 Y listo, ya tendrías instalado Odoo y PG Admin configurado totalmente
+
+# PREGUNTAS
+
+## ¿Que ocurre si en el ordenador local el puerto 5432 está ocupado? ¿Y si lo estuviese el 8069? ¿Como puedes solucionarlo?
+1. Si intento entrar al puerto 5432 estando ocupado, entraría a la instancia que ya tiene ese puerto ocupado, no a la que ya estoy creando. Para solucionarlo, podríamo ir al archivo ```postgresql.conf``` y cambiar la linea del puerto de "5432" a la que quieras.
+![Pregunta1](imagenes/Pregunta1.png)
+2. Si el puerto 8069 está ocupado, directamente nuestro buscador no podrá establecer conexión con el puerto. Para solucionarlo en el ```docker-compose.yml``` cambiamos el puerto
+
+ANTES
+```yml
+web:
+    image: odoo:17.0 # Imagen de Odoo 
+    depends_on:
+      - db  # Dependemos del contenedor db
+    ports:
+      - "8069:8069"
+```
+
+DESPUÉS
+```yml
+web:
+    image: odoo:17.0 # Imagen de Odoo 
+    depends_on:
+      - db  # Dependemos del contenedor db
+    ports:
+      - "8083:8069"
+```
